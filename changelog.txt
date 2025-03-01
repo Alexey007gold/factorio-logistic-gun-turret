@@ -1,0 +1,388 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.10
+Date: 2020.07.25
+  Changes:
+    - Fix side-effect issue from 1.0.9 while building new turret/interface.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.9
+Date: 2020.07.23
+  Changes:
+    - Try to fix a crash while building interface/turret over existing or marked for deconstruction equipments.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.7
+Date: 2020.06.04
+  Changes:
+    - Previous fix 1.0.6 for "Space Exploration" was not working.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.6
+Date: 2020.06.04
+  Changes:
+    - Add compatibility for "Space Exploration" mod.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.5
+Date: 2020.06.02
+  Bugfixes:
+    - Fix some (rare) potential issues while building turret/interface.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.4
+Date: 2020.06.01
+  Bugfixes:
+    - Fix issue where some interface/turret could sometimes be duplicated in repository, thus uselessly increasing processing load.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.3
+Date: 2020.05.29
+  Bugfixes:
+    - Fix issue and added support for "Repair Turret" mod.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.2
+Date: 2020.05.29
+  Changes:
+    - Some refactoring to improve reliability when running with various other mods.
+    - "ion-cannon-targeter" from mod "Orbital Ion Cannon" added to blacklist to avoid creating interface at targeted position.
+  Bugfixes:
+    - Fix potential issue that could sometimes deactivate turret/interfaces.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.1
+Date: 2020.05.28
+  Changes:
+    - Removed unused user setting: "default requested items".
+  Bugfixes:
+    - New migration added for a clean repository rebuild. Previous one could have deactivated some turret/interfaces.
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2020.05.27
+  Changes:
+    - Any ghost interface is now removed when nearest turret deconstructed.
+    - Turret Buffer has now 20 request slots.
+    - Some class refactoring.
+  Info:
+    - Stable.
+---------------------------------------------------------------------------------------------------
+Version: 0.9.2
+Date: 2020.05.21
+  Changes:
+    - Added filtering to mod events triggering: takes care of UPS!
+---------------------------------------------------------------------------------------------------
+Version: 0.9.1
+Date: 2020.05.21
+  Changes:
+    - Because lot of different stuff can be required to feed turrets and repair walls and various weapons, Turret Buffer has now 18 request slots.
+  Bugfixes:
+    - Fix issue where Turret Buffers could not be saved after starting a new map with mod activated.
+  Info:
+    - Turret Buffers have no alt-info. This is intended to distinguish them from regular buffers.
+---------------------------------------------------------------------------------------------------
+Version: 0.9.0
+Date: 2020.05.20
+  Features:
+    - Tired to walk all around base to change some buffer chest request setup ... so I add new 'Turret Buffer' item.
+    - Work like vanilla buffer BUT automatically broadcast his requester setup on change to other Turret Buffers through logistic network, and is able to auto-configure itself from logistic network when laid out.
+    - Turret Buffer do not required any processing time at mod level.
+    - Turret Buffer has 12 request and 20 inventory slots.
+    - Early game version available for 'robot world kind of guy'.
+  Changes:
+    - Removed some remaining console debug messages.
+    - Rework of 'on mined/died entity' code.
+    - When ghost interface or interface is laid out on "to be deconstructed" turret, turret deconstruction is canceled.
+    - When interface is laid out on turret where his interface is marked "to be deconstructed", then interface deconstruction is canceled.
+    - Recipe for Turret Interface modified.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.13
+Date: 2020.05.19
+  Changes:
+    - Some reloading process fine tuning for more UPS gain.
+    - Processing load reduced while broadcasting requester setup to logistic network.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.12
+Date: 2020.05.18
+  Changes:
+    - Added more 'just in time' validity controls to try avoid that "LuaEntity API call when LuaEntity was invalid." crash.
+    - Reloading process slightly reworked for some UPS gain.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.11
+Date: 2020.05.18
+  Changes:
+    - "Auto Interface" user setting is now default to false. This to avoid unsollicited map update following mod update or migration. Please check this setting manually.
+    - Added a consistency check. If any interface/turret couple stay "invalid" for 25 reload try then it will be auto-removed from repository and no longer managed (but items stay on map waiting for bot or manual rebuilt).
+  Bugfixes:
+    - Fix (hope so) a random crash while moving/blueprinting many interface/turrets at the same time with bots randomly deconstructing and building all of them.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.10
+Date: 2020.05.17
+  Changes:
+    - Add some test in migrations to avoid crash in case of invalid entity in game savefile.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.9
+Date: 2020.05.17
+  Bugfixes:
+    - Fix potential crash while laying down turret/interface.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.8
+Date: 2020.05.16
+  Changes:
+    - Reloading Period is now a startup setting.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.7
+Date: 2020.05.14
+  Changes:
+    - Removed some unnecessary events triggers.
+    - UPS efficiency fine tuning:
+        If turret has enough of any ammo then reload process is early canceled. Ammo choice priorization is only performed when reload is really required.
+        Optimization of some factorio API calls.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.6
+Date: 2020.05.13
+  Bugfixes:
+    - Fixed multiplayer compatibility (hope so).
+    - Fixed issue while laying out a turret near a "marked for deconstruction" interface.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.5
+Date: 2020.05.12
+  Changes:
+    - Mod should now be multi-player compatible ('/toggle-heavy-mode' test pass). Please advise in case of further desync.
+  Bugfixes:
+    - Fix issue where a Logistic Gun Turret could stay inactive after been destroyed and rebuilt by bots.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.4
+Date: 2020.05.11
+  Changes:
+    - OOP code style continued / ended.
+    - Reloading workload manager slightly reworked: more efficient => better average UPS.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.3
+Date: 2020.05.10
+  Bugfixes:
+    - Fix issue where an empty, then reload turret was not able to immediately fire again.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.2
+Date: 2020.05.10
+  Bugfixes:
+    - Hotfix:
+      Fix potential (rare) crash in reload process.
+      Fix a potential crash when drone rebuilt a destroyed turret under heavy combat load.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.1
+Date: 2020.05.10
+  Changes:
+    - OOP code style continued / Refactoring.
+  Bugfixes:
+    - Fix incompatibility with mod "Walls Block Spitters" causing interfaces impossible to select with mouse.
+---------------------------------------------------------------------------------------------------
+Version: 0.8.0
+Date: 2020.05.09
+  Changes:
+    - Code style moved to lua OOP. Why? because factorio! Was a big structure change. In case of issue, please rollback to previous release and report. TY.
+    - Interface request setup broadcasting partially remorked.
+    - A newly created turret/interface will now automatically configure requester from logistic network if any.
+---------------------------------------------------------------------------------------------------
+Version: 0.7.4
+Date: 2020.05.08
+  Bugfixes:
+    - Hotfix:
+        an empty interface request setup was able to be broadcasted to other interfaces on logistic network.
+        an interface marked as to be deconstructed was setting his turret as inactive forever.
+---------------------------------------------------------------------------------------------------
+Version: 0.7.3
+Date: 2020.05.08
+  Changes:
+    - Reloading workload manager reworked:
+        Better UPS.
+        Reloading process is now more reactive under heavy combat load.
+        As reloading process is now more efficient, reloading period has been set to 2.5s (please advise if that causing some issue).
+    - Note for modders: code now use event filtering only available since 0.18.
+---------------------------------------------------------------------------------------------------
+Version: 0.7.2
+Date: 2020.05.07
+  Changes:
+    - Reloading process improved:
+        Manage when turret is empty and some "non requested ammo" are available => Turret will be reloaded with no matter what ammo.
+        Manage when turret has "non requested ammo" but no "requested ammo" are available => turret will finish magazines till empty.
+        Manage when turret has "non requested ammo" but some "requested ammo" are available => turret will unload and then reload best available ammo.
+---------------------------------------------------------------------------------------------------
+Version: 0.7.1
+Date: 2020.05.07
+  Changes:
+    - Get rid of ammo category filtering (except 'ammo' type) while setting up interface requests. You can now select whatever ammo you like. If turret do not accept it it will simply not work.
+---------------------------------------------------------------------------------------------------
+Version: 0.7.0
+Date: 2020.05.07
+  Changes:
+    - New feature:
+        Added startup setting that allows to automatically broadcast interface request slots setup to other 'same type' interfaces, inside the same logistic network.
+        Default setting value is 'false'.
+        Broadcast is processed when interface inventory GUI is closed by player.
+---------------------------------------------------------------------------------------------------
+Version: 0.6.2
+Date: 2020.05.06
+  Changes:
+    - Reloading code improved: removed some unnecessary factorio API calls.
+    - Code polishing.
+  Bugfixes:
+    - Fix potential issue while laying out a turret on tiles that already has many interfaces.
+    - Fix potential crash while loading a map with partially constructed interface/turret (ghost parts).
+---------------------------------------------------------------------------------------------------
+Version: 0.6.1
+Date: 2020.05.06
+  Bugfixes:
+    - Fix issue where many interfaces could be installed at same position around turret.
+---------------------------------------------------------------------------------------------------
+Version: 0.6.0
+Date: 2020.05.05
+  Changes:
+    - Reloading code refactored.
+  Bugfixes:
+    - Fix issue while checking ammo types in interface requester slots.
+    - Fix potential issue in reloading process.
+---------------------------------------------------------------------------------------------------
+Version: 0.5.9
+Date: 2020.05.05
+  Changes:
+    - Some more performance tuning. Added kind of workload manager.
+  Bugfixes:
+    - Fixed potential crash when removing turret while it was running reloading process.
+---------------------------------------------------------------------------------------------------
+Version: 0.5.8
+Date: 2020.05.04
+  Changes:
+    - Performance improved. UPS load reduced up to 50%.
+---------------------------------------------------------------------------------------------------
+Version: 0.5.7
+Date: 2020.05.04
+  Changes:
+    - Interface position is now more visualy consistent with turret direction.
+  Bugfixes:
+    - Fix potential crash in reload process.
+    - Fix some minor issues while adding ghost interface/turret entities around each others.
+---------------------------------------------------------------------------------------------------
+Version: 0.5.6
+Date: 2020.05.04
+  Changes:
+    - Set interface inventory size to 10 for some ammo types that are not stackable (artillery).
+    - Move many vars to "local" to improve performance.
+    - Added user setting to interface: "request from buffers".
+    - Prefix settings with "lgt-" to avoid inconsistencies with other mods
+    - Various refactoring, improvements and minor changes.
+---------------------------------------------------------------------------------------------------
+Version: 0.5.5
+Date: 2020.05.03
+  Changes:
+    - Dynamically rebuild live data table at map startup to avoid problems if autosave corrupted by mod crash.
+---------------------------------------------------------------------------------------------------
+Version: 0.5.4
+Date: 2020.05.03
+  Bugfixes:
+    - Fix crash while mining interface/turret entities with robots.
+    - Fix issue while pasting an "interface/turret" near equipment marked as "to be deconstructed".
+---------------------------------------------------------------------------------------------------
+Version: 0.5.3
+Date: 2020.05.03
+  Changes:
+    - 0.5.2 hotfix do not work as intended. Removed function to auto-mine interface when turret mined. Must investigate.
+---------------------------------------------------------------------------------------------------
+Version: 0.5.2
+Date: 2020.05.03
+  Bugfixes:
+    - Fix crash while mining entities with robots.
+---------------------------------------------------------------------------------------------------
+Version: 0.5.1
+Date: 2020.05.03
+  Changes:
+    - All settings set to "startup" as there is no event to reload them after change and reading them each tick is UPS consumming.
+    - Create entity reworked.
+    - Reload process reworked. Top priority slot always first on the left.
+    - Add migration to reset turret "operable" property to true for previous mod versions.
+    - Mining a turret will mine interface too. Mining interface will not mine turret.
+    - Interface is now always located at same position. In some case it could be left at a wrong place.
+    - Add some code to check interface slots requests at GUI closed. Filter to "ammo" type only. Max requested items is set to 100.
+    - Interface inventory is now 6 slots to potentialy avoid overflow when auto-loader unloading turret.
+    - Various refactoring, improvements and minor changes.
+---------------------------------------------------------------------------------------------------
+Version: 0.5.0
+Date: 2020.05.02
+  Changes:
+    - Readded default requests on new interfaces if enabled in settings. Blueprinted interfaces will ignore these defaults.
+    - Stores a dynamic list of all interfaces rather than asking for a new list each reload tick for a ~order of magnitude better UPS.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.8
+Date: 2020.05.02
+  Bugfixes:
+    - Fix ammo priority system.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.7
+Date: 2020.05.01
+  Changes:
+    - Only "turrets" technology is required for early available user setting.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.6
+Date: 2020.05.01
+  Changes:
+    - Read user settings at map startup.
+    - Set default settings values if -unexpected- nil.
+    - Some minor changes and refactoring.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.5
+Date: 2020.05.01
+  Bugfixes:
+    - Add migration to reset previously installed turrets (v0.2.x) to minable.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.4
+Date: 2020.05.01
+  Bugfixes:
+    - Actually fixed below error by making more explicit what the interface inherits from a requester chest.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.3
+Date: 2020.05.01
+  Bugfixes:
+    - Maybe fixed error with interface.next_upgrade collision mask dissonance ? by changing squeak through behaviour.
+---------------------------------------------------------------------------------------------------
+Version: 0.4.2
+Date: 2020.05.01
+  Changes:
+    - Made interfaces availiable before logistic systems research so logistic bots can be useful before utility science.
+  Bugfixes:
+    - Fixed assumption of higher res graphics in 0.18 - Sorry, I really should have tested it in 0.18 before releasing it to 0.18
+---------------------------------------------------------------------------------------------------
+Version: 0.4.0
+Date: 2020.05.01
+  Changes:
+    - Mod now places interface on after any turret built, rather than placing turret after interface is built.
+        Interface can now (hopefully) work with any modded ammo turret or artillery turret, regardless of ammo type.
+    - Removed default request in interfaces. Now interfaces can be copied through blueprints/copy function.
+    - Reworked some other internal stuff.
+    - Removed German localization, I don't know German and thus can't maintain it.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.5
+Date: 2020.04.29
+  Changes:
+    - When out of ammo turret will deactivate and no longer continue to track enemies like dummy.
+    - Max logistic request stack size set to 100.
+  Bugfixes:
+    - Fixed various minor issues.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.4
+Date: 2020.04.28
+  Changes:
+    - Some more refactoring to improve efficiency.
+    - Added startup parameters: early available (false) / request qty (25) / loaded magazines (5)
+    - Automatic update of all existing turrets when startup settings are changed.
+  Bugfixes:
+    - Fix potential issue while removing turret.
+---------------------------------------------------------------------------------------------------
+Version: 0.2.3
+Date: 2020.04.28
+  Changes:
+    - Added migration code that were missing in 0.2.2
+---------------------------------------------------------------------------------------------------
+Version: 0.2.2
+Date: 2020.04.27
+  Info:
+    - Base mod from Bl4ckmail / Robokat
+  Changes:
+    - Factorio 0.18.
+    - Code refactoring / optimization.
+    - Integrated logistic chest has now 3 configured slots, one for each ammo type.
+    - Request from buffers is default to true.
+    - Default logistic request is for 25 ammo of each type (can be overrided manually in game or in control.lua).
+    - When reloading turret automatically select best ammo available in chest.
+    - A maximum of 5 magazines can be reloaded at once.
+    - Reload try period is 2s (120 ticks).
