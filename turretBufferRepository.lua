@@ -16,14 +16,14 @@ local tbRepository =
 --
 --- Init repository
 function tbRepository.Init()
-	global.turretBuffers = { }				    		-- initialize buffers repository
-	tbRepository.turretBuffers = global.turretBuffers  	-- set local reference to buffers repository
+	storage.turretBuffers = { }				    		    -- initialize buffers repository
+	tbRepository.turretBuffers = storage.turretBuffers  	-- set local reference to buffers repository
 end
 
 --
 --- load repository
 function tbRepository.Load()
-	tbRepository.turretBuffers = global.turretBuffers	-- set local reference to buffers repository
+	tbRepository.turretBuffers = storage.turretBuffers	-- set local reference to buffers repository
 	-- restore metatables
 	for _, tb in pairs(tbRepository.turretBuffers)
 	do
@@ -48,7 +48,7 @@ function tbRepository.Get(arg)
 			return arg, tb
 		end
 
-	elseif type == "table"
+	elseif type == "table" or type == "userdata"
 	then
 		local unitNumber = arg.unit_number
 		for k, tb in pairs(tbRepository.turretBuffers)
@@ -94,7 +94,7 @@ function tbRepository.Remove(arg)
 	then
 		k = arg
 
-	elseif type == "table"
+	elseif type == "table" or type == "userdata"
 	then
 		k, _ = tbRepository.Get(arg)
 	end

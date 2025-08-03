@@ -234,15 +234,26 @@ function lib.GetRequesterSetup(entity)
 
 	if lib.IsValid(entity)
 	then
-		for slot = 1, entity.request_slot_count
+        local point = entity.get_requester_point()
+		for i = 1, point.sections_count
 		do
-			local requestSlot = entity.get_request_slot(slot)
-			if requestSlot ~= nil
-			then
-				table.insert(requesterSetup, { slot = slot, name = requestSlot.name, count = requestSlot.count })
-			else
-				table.insert(requesterSetup, { slot = slot, name = "", count = 0 })
-			end
+            local section = point.get_section(i)
+            for j = 1, section.filters_count do
+                local current_filter = section.get_slot(j)
+                if current_filter.value ~= nil
+                then
+                    table.insert(requesterSetup, { section = i,
+                                                   slot = j,
+                                                   group = section.group,
+                                                   value = current_filter.value,
+                                                   min = current_filter.min,
+                                                   max = current_filter.max })
+                else
+                    table.insert(requesterSetup, { section = i,
+                                                   slot = j,
+                                                   group = section.group})
+                end
+            end
 		end
 	end
 
@@ -257,11 +268,21 @@ function lib.WriteRequesterSlots(requesterSetup, entity)
 
 	for _, requestSlot in pairs(requesterSetup)
 	do
-		if requestSlot.count > 0
+        local point = entity.get_requester_point()
+        local section = point.get_section(requestSlot.section)
+        while section == nil
+        do
+            point.add_section(requestSlot.group)
+            section = point.get_section(requestSlot.section)
+        end
+
+		if requestSlot.value ~= nil
 		then
-			entity.set_request_slot({ name = requestSlot.name, count = requestSlot.count }, requestSlot.slot)
+			section.set_slot(requestSlot.slot, {value = requestSlot.value,
+                                                min = requestSlot.min,
+                                                max = requestSlot.max })
 		else
-			entity.clear_request_slot(requestSlot.slot)
+			entity.clear_slot(requestSlot.slot)
 		end
 	end
 end
@@ -273,15 +294,22 @@ function lib.UpdateRequesterSlots(sourceEntity, destEntity)
 	or not lib.IsValid(destEntity)
 	then return end
 
-	for slot = 1, sourceEntity.request_slot_count
+    local source_point = sourceEntity.get_requester_point()
+    local dest_point = destEntity.get_requester_point()
+	for i = 1, source_point.sections_count
 	do
-		local requestSlot = sourceEntity.get_request_slot(slot)
-		if requestSlot ~= nil
-		then
-			destEntity.set_request_slot({ name = requestSlot.name, count = requestSlot.count }, slot)
-		else
-			destEntity.clear_request_slot(slot)
-		end
+        local requestSlot = source_point.get_section(i)
+        local destSlot = dest_point.get_section(i)
+        for j = 1, requestSlot.filters_count do
+            local current_filter = requestSlot.get_slot(j)
+            if current_filter.value ~= nil then
+                destSlot.set_slot(j, {value = current_filter.value,
+                                      min = current_filter.min,
+                                      max = current_filter.max })
+            else
+                destSlot.clear_slot(j)
+            end
+        end
 	end
 end
 

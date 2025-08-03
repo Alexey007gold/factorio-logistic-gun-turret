@@ -2,16 +2,16 @@
 --- migration 1.0.1
 
 -- purge old vars
-global.lgts = nil
-global.earlyAvailable = nil
-global.defaultRequestedItems = nil
-global.maxLoadedMagazine = nil
-global.autoInterface = nil
-global.usrSettings = nil
+storage.lgts = nil
+storage.earlyAvailable = nil
+storage.defaultRequestedItems = nil
+storage.maxLoadedMagazine = nil
+storage.autoInterface = nil
+storage.usrSettings = nil
 
 --
 --- rebuild clean class oriented repository
-global.logisticGuns = { }
+storage.logisticGuns = { }
 local turretFoundCount = 0
 for _, surface in pairs(game.surfaces)
 do
@@ -44,7 +44,7 @@ do
                     turret = t,
                     invalidCount = 0
                 }
-                table.insert(global.logisticGuns, lg)
+                table.insert(storage.logisticGuns, lg)
                 turretFoundCount = turretFoundCount + 1
             end
         end
@@ -55,37 +55,43 @@ end
 -- rebuild ammo Storage
 local errorCount = 0
 local ammoStorageCount = 0
-for key, lg in pairs(global.logisticGuns)
+for key, lg in pairs(storage.logisticGuns)
 do
     if lg.interface
     and lg.interface.entity
     and lg.interface.entity.valid
 	then
 		lg.interface.ammoStorage = { }
-		for slot = 1, lg.interface.entity.request_slot_count
+		local point = lg.interface.entity.get_requester_point()
+        for i = 1, point.sections_count
 		do
-            local requestSlot = lg.interface.entity.get_request_slot(slot)
-			if requestSlot
-			then
-                if requestSlot.count > 100
+            local section = point.get_section(i)
+            for j = 1, section.filters_count do
+                local current_filter = section.get_slot(j)
+                if current_filter.name ~= nil
                 then
-                    lg.interface.entity.set_request_slot({ name = requestSlot.name, count = 100 }, slot)
-                end
+                    if section.count > 100
+                    then
+                        lg.interface.entity.set_slot(j, {value = current_filter.value,
+                                                         min = 100,
+                                                         max = current_filter.max })
+                    end
 
-                lg.interface.ammoStorage[requestSlot.name] = { slot = slot, qty = 0 }
-			end
+                    lg.interface.ammoStorage[current_filter.value.name] = { slot = i, qty = 0 }
+                end
+            end
         end
         ammoStorageCount = ammoStorageCount + 1
     else
 		errorCount = errorCount + 1
-		table.remove(global.logisticGuns, key)
+		table.remove(storage.logisticGuns, key)
 	end
 end
 
 -- eventually add repository for buffers
-if not global.buffers
+if not storage.buffers
 then
-    global.buffers = { }
+    storage.buffers = { }
 end
 
 game.print("Logistic Gun Turret mod migrated to 1.0.1 data pattern.")

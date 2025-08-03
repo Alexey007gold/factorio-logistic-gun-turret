@@ -12,14 +12,14 @@ then
     data.raw.recipe["turret-interface"].ingredients =
     {
         { "electronic-circuit", 3 },
-        { "logistic-chest-requester", 1 },
+        { "requester-chest", 1 },
         { "iron-plate", 5 }
     }
 
     data.raw.recipe["turret-buffer"].ingredients =
     {
         { "electronic-circuit", 6 },
-        { "logistic-chest-buffer", 1 },
+        { "buffer-chest", 1 },
         { "iron-plate", 10 }
     }
 

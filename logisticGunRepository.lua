@@ -20,14 +20,14 @@ local lgRepository =
 --
 --- Init repository
 function lgRepository.Init()
-	global.logisticGuns = { }						-- initialize global repository
-	lgRepository.logisticGuns = global.logisticGuns	-- set local reference to repository
+	storage.logisticGuns = { }						    -- initialize global repository
+	lgRepository.logisticGuns = storage.logisticGuns	-- set local reference to repository
 end
 
 --
 --- load repository
 function lgRepository.Load()
-	lgRepository.logisticGuns = global.logisticGuns	-- set local reference to repository
+	lgRepository.logisticGuns = storage.logisticGuns	-- set local reference to repository
 
 	-- restore metatables
 	for _, lg in pairs(lgRepository.logisticGuns)
@@ -63,7 +63,7 @@ function lgRepository.Get(arg)
 			return arg, lg
 		end
 
-	elseif type == "table"
+	elseif type == "table" or type == "userdata"
 	then
 		local unitNumber = arg.unit_number
 		for k, lg in pairs(lgRepository.logisticGuns)
@@ -112,7 +112,7 @@ function lgRepository.Remove(arg)
 	then
 		k = arg
 
-	elseif type == "table"
+	elseif type == "table" or type == "userdata"
 	then
 		k, _ = lgRepository.Get(arg)
 	end

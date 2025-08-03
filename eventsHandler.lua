@@ -133,7 +133,7 @@ function eventsHandler.MinedEntityHandler(event)
             then
                 -- mine interface
 				-- will be removed from repository when interface removal event fires
-				player.mine_entity(interface, interface.force)
+				player.mine_entity(interface, false)
             end
         end
 

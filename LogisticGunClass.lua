@@ -248,19 +248,21 @@ function LogisticGunClass:Reload()
 		ammo.qty = 0
 	end
 	local interfaceContent = self.interface.inventory.get_contents()
-	for ammoName, qty in pairs(interfaceContent)
+	for _, item in ipairs(interfaceContent)
 	do
-		if ammoStorage[ammoName] ~= nil
+		if ammoStorage[item.name] ~= nil
 		then
-			ammoStorage[ammoName].qty = qty
+			ammoStorage[item.name].qty = item.count
 		end
 	end
 
 	-- reloading
-	local turretAmmoName, turretAmmoQty = next(self.turret.inventory.get_contents())
-	if turretAmmoName ~= nil
+	local item = self.turret.inventory.get_contents()[1]
+	if item ~= nil
 	then
 		-- turret has ammo inside
+        local turretAmmoName = item.name
+        local turretAmmoQty = item.count
 		local stockedTurretAmmo = ammoStorage[turretAmmoName]
 
 		if stockedTurretAmmo ~= nil
@@ -340,9 +342,9 @@ function LogisticGunClass:Reload()
 		end
 
 		-- turret could not be reloaded based on priority settings. Select first ammo found in interface.
-		for ammoName, qty in pairs(interfaceContent)
+		for _, item in ipairs(interfaceContent)
 		do
-			if InsertAmmo(self, ammoName, qty >= usrSettings.maxLoadedMagazine and usrSettings.maxLoadedMagazine or qty)
+			if InsertAmmo(self, item.name, item.count >= usrSettings.maxLoadedMagazine and usrSettings.maxLoadedMagazine or item.count)
 			then
 				return
 			end

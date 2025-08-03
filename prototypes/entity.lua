@@ -10,9 +10,10 @@ local interface =
 	max_health = 400,
 	-- compatibility with "Wall Blocks Spitters" mod overriding all turret collision_mask to "layer-13"
 	--collision_mask = { "layer-11" }, -- base changed to 15
-	collision_mask = { "layer-15" },
+	collision_mask = { layers={ } },
 	collision_box = { { -0.35, -0.35 }, { 0.35, 0.35 } },
 	selection_box = { { -0.5, -0.5 }, { 0.5, 0.5 } },
+	selection_priority = 100,
 	resistances =
 	{
 		{ type = "fire", percent = 90 },
@@ -25,7 +26,7 @@ local interface =
 	scale_info_icons = true
 }
 
-local chestRequester = table.deepcopy(data.raw["logistic-container"]["logistic-chest-requester"])
+local chestRequester = table.deepcopy(data.raw["logistic-container"]["requester-chest"])
 
 -- explicitly only copy these properties to avoid errors when a mod mutates the base prototype
 interface.animation = chestRequester.animation
@@ -54,9 +55,10 @@ local buffer =
 	max_health = 400,
 	-- compatibility with "Wall Blocks Spitters" mod overriding all turret collision_mask to "layer-13"
 	--collision_mask = { "layer-11" }, -- base changed to 15
-	collision_mask = { "layer-15" },
+	collision_mask = { layers={ } },
 	collision_box = { { -0.35, -0.35 }, { 0.35, 0.35 } },
 	selection_box = { { -0.5, -0.5 }, { 0.5, 0.5 } },
+	selection_priority = 100,
 	resistances =
 	{
 		{ type = "fire", percent = 90 },
@@ -69,7 +71,7 @@ local buffer =
 	scale_info_icons = true
 }
 
-local chestBuffer = table.deepcopy(data.raw["logistic-container"]["logistic-chest-buffer"])
+local chestBuffer = table.deepcopy(data.raw["logistic-container"]["buffer-chest"])
 
 -- explicitly only copy these properties to avoid errors when a mod mutates the base prototype
 buffer.animation = chestBuffer.animation
