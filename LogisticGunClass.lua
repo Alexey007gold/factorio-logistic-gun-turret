@@ -193,15 +193,6 @@ function LogisticGunClass:Build(entity, player)
 end
 
 --
---- check if turret should be active
-local function CheckActive(turret)
-	if turret.entity.active
-	then
-		turret.entity.active = not turret.inventory.is_empty()
-	end
-end
-
---
 --- remove ammo from turret
 local function RemoveAmmo(self, ammoName, ammoCount)
 	local magazines = { name = ammoName, count = ammoCount }
@@ -220,7 +211,6 @@ local function InsertAmmo(self, ammoName, ammoCount)
 	then return false end
 
 	magazines.count = self.turret.inventory.insert(magazines)
-	self.turret.entity.active = not self.turret.inventory.is_empty()
 	return self.interface.inventory.remove(magazines) == magazines.count
 end
 
@@ -237,7 +227,6 @@ function LogisticGunClass:Reload()
 	-- return if interface inventory is empty
 	if self.interface.inventory.is_empty()
 	then
-		CheckActive(self.turret)
 		return
 	end
 
@@ -349,8 +338,6 @@ function LogisticGunClass:Reload()
 				return
 			end
 		end
-
-		CheckActive(self.turret)
 	end
 end
 
