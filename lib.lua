@@ -197,6 +197,7 @@ function lib.AddGhostInterface(turret)
 	or not usrSettings.autoInterface
 	or not turret.force.technologies[consts.LOGISTIC_TURRETS].researched
 	or GetAnyInterface(turret) ~= nil -- skip if turret already has associated interface.
+	or turret.surface.platform ~= nil -- skip on space platform.
 	then return false end
 
 	-- place a ghost interface
