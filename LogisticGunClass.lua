@@ -224,6 +224,23 @@ function LogisticGunClass:Reload()
 	--and turretAmmoQty >= usrSettings.maxLoadedMagazine
 	--then return end
 
+	if self.turret.entity.name == 'artillery-turret' and self.turret.entity.artillery_auto_targeting
+    then
+		rendering.draw_text{
+          text = 'A',
+          surface = self.turret.entity.surface,
+          target = self.turret.entity,
+          color = { r = 250, g = 42, b = 42},
+          scale = 1.0,
+          time_to_live = usrSettings.reloadingPeriod,
+          render_mode = 'chart',
+          vertical_alignment = 'middle',
+          alignment = 'center',
+          scale_with_zoom = true,
+          only_in_alt_mode = true
+        }
+	end
+
 	-- return if interface inventory is empty
 	if self.interface.inventory.is_empty()
 	then
