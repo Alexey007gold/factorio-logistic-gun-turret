@@ -19,7 +19,7 @@ local interface =
 		{ type = "fire", percent = 90 },
 		{ type = "impact", percent = 60 }
 	},
-	inventory_size = 10,
+	inventory_size = 48,
     logistic_mode = "requester",
 	logistic_slots_count = 3,
 	squeak_behaviour = false,
