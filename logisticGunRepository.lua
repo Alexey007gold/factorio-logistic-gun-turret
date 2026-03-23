@@ -14,20 +14,28 @@ local Turret = require("TurretClass")
 --- Logistic Gun Repository
 local lgRepository =
 {
-	logisticGuns = { }
+	logisticGuns = { },
+	highPrioCheckGuns = { },
+	lgByTurretUnitNumber = { }
 }
 
 --
 --- Init repository
 function lgRepository.Init()
-	storage.logisticGuns = { }						    -- initialize global repository
-	lgRepository.logisticGuns = storage.logisticGuns	-- set local reference to repository
+	storage.logisticGuns = { }											-- initialize global repository
+	storage.highPrioCheckGuns = { }										-- initialize global repository
+	storage.lgByTurretUnitNumber = { }									-- initialize global repository
+	lgRepository.logisticGuns = storage.logisticGuns					-- set local reference to repository
+	lgRepository.highPrioCheckGuns = storage.highPrioCheckGuns			-- set local reference to repository
+	lgRepository.lgByTurretUnitNumber = storage.lgByTurretUnitNumber	-- set local reference to repository
 end
 
 --
 --- load repository
 function lgRepository.Load()
-	lgRepository.logisticGuns = storage.logisticGuns	-- set local reference to repository
+	lgRepository.logisticGuns = storage.logisticGuns					-- set local reference to repository
+	lgRepository.highPrioCheckGuns = storage.highPrioCheckGuns			-- set local reference to repository
+	lgRepository.lgByTurretUnitNumber = storage.lgByTurretUnitNumber	-- set local reference to repository
 
 	-- restore metatables
 	for _, lg in pairs(lgRepository.logisticGuns)
@@ -123,6 +131,23 @@ function lgRepository.Remove(arg)
 	end
 end
 
+local function reloadTurret(lg)
+	if lg ~= nil
+	then
+		if pcall(lg.Reload, lg)
+		then
+			lg.invalidCount = 0
+		else
+			lg.invalidCount = lg.invalidCount + 1
+			if lg.invalidCount >= consts.INVALID_TIMEOUT
+			then
+				lgRepository.Remove(k)
+				return
+			end
+		end
+	end
+end
+
 --
 --- process turret reloading on tick event - workload manager
 function lgRepository.ReloadAmmoHandler(event)
@@ -130,19 +155,40 @@ function lgRepository.ReloadAmmoHandler(event)
 	for k = #lgRepository.logisticGuns - (event.tick % usrSettings.reloadingPeriod), 1, -usrSettings.reloadingPeriod
 	do
 		lg = lgRepository.logisticGuns[k]
-		if lg ~= nil
-		then
-			if pcall(lg.Reload, lg)
-			then
-				lg.invalidCount = 0
+		reloadTurret(lg)
+	end
+
+	if event.tick % 5 == 0 then
+		for lg, expiry_tick in pairs(storage.highPrioCheckGuns)
+		do
+			if event.tick > expiry_tick then
+				storage.highPrioCheckGuns[lg] = nil -- Return to normal schedule
 			else
-				lg.invalidCount = lg.invalidCount + 1
-				if lg.invalidCount >= consts.INVALID_TIMEOUT
-				then
-					lgRepository.Remove(k)
-					return
-				end
+				reloadTurret(lg)
 			end
+		end
+	end
+end
+
+local function FindLg(turret)
+	local interface = lib.GetInterfaces(turret)[1]
+	local _, lg = lgRepository.Get(interface)
+	storage.lgByTurretUnitNumber[turret.unit_number] = lg
+	return lg
+end
+
+--
+--- process turret dealing damage event -> put turret into high prio check list
+function lgRepository.DamagedHandler(event)
+-- 	game.print(serpent.block(event))
+	local source = event.cause
+-- 	game.print('event ' .. serpent.block(source))
+	if source and source.valid and source.type == consts.AMMO_TURRET and source.surface.platform == nil then
+		-- Turret just fired and hit something!
+		-- Add to a 'high_priority' list or reset a combat timer
+		local lg = storage.lgByTurretUnitNumber[source.unit_number] or FindLg(source)
+		if lg ~= nil then
+			storage.highPrioCheckGuns[lg] = game.tick + 60 -- Stay high priority for 5 seconds
 		end
 	end
 end

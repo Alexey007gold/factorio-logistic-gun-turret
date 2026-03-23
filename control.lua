@@ -72,5 +72,6 @@ script.on_event(defines.events.on_gui_closed, eventsHandler.GUIClosedHandler)
 --
 -- on_tick event handling
 script.on_event(defines.events.on_tick, lgRepository.ReloadAmmoHandler)
+script.on_event(defines.events.on_entity_damaged, lgRepository.DamagedHandler)
 
 --
